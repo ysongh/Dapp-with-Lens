@@ -54,7 +54,7 @@ function Publications({
     <>
       {
         publications?.map((pub, index) => (
-          <div key={index} className="py-4 bg-zinc-900 rounded mb-3 px-4">
+          <div key={index} className="py-4 bg-zinc-900 text-white rounded mb-3 px-4">
             <p>{pub.metadata.content}</p>
             {
               pub.metadata?.media[0]?.original && ['image/jpeg', 'image/png'].includes(pub.metadata?.media[0]?.original.mimeType) && (
