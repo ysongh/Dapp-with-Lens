@@ -9,7 +9,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { formatPicture } from '../../../utils';
 
 export default function ProfileDetail() {
-  const { execute: login } = useWalletLogin();
+  const { execute: login, isPending: isLoginPending } = useWalletLogin();
   const { execute: logout } = useWalletLogout();
   const { data: wallet } = useActiveProfile();
   const { isConnected } = useAccount();
@@ -55,7 +55,7 @@ export default function ProfileDetail() {
               profile={profile}
               wallet={wallet}
             />
-            <button className="ml-4 bg-white text-black px-14 py-4 rounded-full mb-4" onClick={logout}>Sign Out</button>
+            <button className="ml-4 bg-white text-black px-14 py-4 rounded-full mb-4" disabled={isLoginPending} onClick={logout}>Sign Out</button>
             </>
           )
         }
