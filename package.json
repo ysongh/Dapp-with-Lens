@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.16",
     "@lens-protocol/react-web": "^1.1.1",
     "@lens-protocol/wagmi": "^1.1.1",
     "autoprefixer": "10.4.14",
