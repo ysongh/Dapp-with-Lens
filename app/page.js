@@ -1,16 +1,55 @@
 'use client'
+import React, { useState } from "react"
+import { ethers } from "ethers"
 import { useExploreProfiles } from '@lens-protocol/react-web'
 import Link from 'next/link'
 import { formatPicture } from '../utils'
 
 export default function Home() {
+  const [currentAccount, setCurrentAccount] = useState("")
+
   const { data: profiles } = useExploreProfiles({
     limit: 25
   })
 
+  const connectWallet = async () => {
+    try {
+      const { ethereum } = window
+      if (!ethereum) {
+        alert("Get MetaMask!")
+        return
+      }
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts"
+      })
+      console.log("Connected", accounts[0])
+      setCurrentAccount(accounts[0])
+      fetchFollowers(accounts[0])
+      fetchTopFollowers(accounts[0])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className='p-20'>
       <h1 className='text-5xl'>My Lens App</h1>
+      {
+        !currentAccount && (
+          <button  onClick={connectWallet}
+            className="mb-3 px-8 py-2 rounded-3xl bg-white text-black mt-2"
+          >
+            Connect Wallet
+          </button>
+        )
+      }
+      {
+        currentAccount && (
+          <p className="mt-3 mb-3">
+            { currentAccount }
+          </p>
+        )
+      }
       {
         profiles?.map((profile, index) => (
           <Link href={`/profile/${profile.handle}`} key={index}>
