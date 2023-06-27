@@ -14,3 +14,17 @@ export function formatPicture(picture) {
     return picture
   }
 }
+
+export function getGateway(hashoruri) {
+  if (hashoruri.includes('https')) {
+    return hashoruri
+  }
+  if (hashoruri.includes('ipfs://')) {
+    console.log("ipfs: ", hashoruri.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+    return hashoruri.replace('ipfs://', 'https://ipfs.io/ipfs/')
+  }
+  if (hashoruri.includes('ar://')) {
+    console.log('ar: ', hashoruri.replace('ar://', 'https://arweave.net/'))
+    return hashoruri.replace('ar://', 'https://arweave.net/')
+  }
+} 
