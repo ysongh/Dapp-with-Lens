@@ -4,6 +4,7 @@ import { ethers } from "ethers"
 
 export default function Home() {
   const [currentAccount, setCurrentAccount] = useState("")
+  const [profiles, setProfiles] = useState([])
 
   useEffect(() => {
     checkIfWalletIsConnected()
@@ -49,6 +50,36 @@ export default function Home() {
     }
   }
 
+  async function fetchFollowers(account) {
+    try {
+      const profileId = await fetchProfileId(account)
+      const response = await client.query({
+        query: getFollowers,
+        variables: {
+          profileId
+        }
+      })
+      console.log(response)
+      let profileData = response.data.followers.items.filter(profile => {
+        if (profile.wallet.defaultProfile) {
+          return true
+        } else {
+          return false
+        }
+      })
+      profileData = profileData.map(p => {
+        return {
+          ...p.wallet.defaultProfile,
+          address: p.wallet.address
+        }
+      }).filter(p => p.picture)
+      console.log('profileData:', profileData)
+      setProfiles(profileData)
+    } catch (err) {
+      console.log('error getting followers:', err)
+    }
+  }
+
   return (
     <div className='p-20'>
       <h1 className='text-5xl'>My Lens App</h1>
@@ -67,6 +98,42 @@ export default function Home() {
             { currentAccount }
           </p>
         )
+      }
+      {
+        profiles.map((profile, index) => (
+          <div key={index} className="
+            p-3 border-white border mt-4 border-slate-400	cursor-pointer
+          "
+          onClick={() => setRecipient(profile.address)}
+          >
+            {
+              profile.picture?.original?.url && (
+                <img
+                  className="w-32 rounded-2xl"
+                  src={getGateway(profile.picture?.original?.url)}
+                />
+              )
+            }
+            {
+              profile.picture?.url && (
+                <img
+                  className="w-32 rounded-2xl"
+                  src={getGateway(profile.picture.url)}
+                />
+              )
+            }
+            {
+              profile.picture?.uri && (
+                <img
+                  className="w-32 rounded-2xl"
+                  src={getGateway(profile.picture.uri)}
+                />
+              )
+            }
+            <p className="mt-2 text-xl text-fuchsia-400">@{profile.handle}</p>
+            <p>{profile.name}</p>
+          </div>
+        ))
       }
     </div>
   )
