@@ -5,6 +5,9 @@ import { ethers } from "ethers"
 export default function Home() {
   const [currentAccount, setCurrentAccount] = useState("")
   const [profiles, setProfiles] = useState([])
+  const [recipient, setRecipient] = useState("")
+  const [flowRate, setFlowRate] = useState("")
+  const [flowRateDisplay, setFlowRateDisplay] = useState("")
   const [topProfiles, setTopProfiles] = useState([])
 
   useEffect(() => {
@@ -100,6 +103,19 @@ export default function Home() {
     }
   }
 
+  const handleRecipientChange = (e) => {
+    setRecipient(() => ([e.target.name] = e.target.value))
+  }
+
+  const handleFlowRateChange = (e) => {
+    setFlowRate(() => ([e.target.name] = e.target.value))
+    let newFlowRateDisplay = calculateFlowRate(e.target.value)
+    if (newFlowRateDisplay) {
+      setFlowRateDisplay(newFlowRateDisplay.toString())
+    }
+  }
+
+
   return (
     <div className='p-20'>
       <h1 className='text-5xl'>My Lens App</h1>
@@ -119,6 +135,29 @@ export default function Home() {
           </p>
         )
       }
+      <div className="flex flex-col items-start">
+        <input
+          value={recipient}
+          placeholder="Enter recipient address"
+          onChange={handleRecipientChange}
+          className='text-black py-1 px-2 mb-2 w-72'
+        />
+        <input
+          value={flowRate}
+          onChange={handleFlowRateChange}
+          placeholder="Enter a flowRate in wei/second"
+          className='text-black py-1  px-2 w-72'
+        />
+        <button
+          className="px-8 py-2 rounded-3xl bg-white text-black mt-2"
+          onClick={() => {
+            createNewFlow(recipient, flowRate)
+          }}
+        >
+          Click to Create Your Stream
+        </button>
+        <a className="mt-4 text-green-400" href="https://app.superfluid.finance/" target="_blank" rel='no-opener'>View Superfluid Dashboard</a>
+      </div>
       {
         profiles.map((profile, index) => (
           <div key={index} className="
