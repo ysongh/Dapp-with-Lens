@@ -5,6 +5,7 @@ import { ethers } from "ethers"
 export default function Home() {
   const [currentAccount, setCurrentAccount] = useState("")
   const [profiles, setProfiles] = useState([])
+  const [topProfiles, setTopProfiles] = useState([])
 
   useEffect(() => {
     checkIfWalletIsConnected()
@@ -77,6 +78,25 @@ export default function Home() {
       setProfiles(profileData)
     } catch (err) {
       console.log('error getting followers:', err)
+    }
+  }
+
+  async function fetchTopFollowers(account) {
+    try {
+      const profileId = await fetchProfileId(account)
+      const data = await fetch('/api/lens-bigquery', {
+        method: "POST",
+        body: JSON.stringify({
+          profileId
+        })
+      })
+      const json = await data.json()
+
+      if (json.data) {
+        setTopProfiles(json.data)
+      }
+    } catch (err) {
+      console.log('error fetching top followers...', err)
     }
   }
 
