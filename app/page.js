@@ -115,6 +115,16 @@ export default function Home() {
     }
   }
 
+  function calculateFlowRate(amount) {
+    if (Number(amount) === 0) {
+      return 0
+    }
+    const amountInWei = ethers.BigNumber.from(amount)
+    const monthlyAmount = ethers.utils.formatEther(amountInWei.toString())
+    // @ts-ignore
+    const calculatedFlowRate = monthlyAmount * 3600 * 24 * 30
+    return calculatedFlowRate
+  }
 
   return (
     <div className='p-20'>
