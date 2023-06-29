@@ -158,6 +158,12 @@ export default function Home() {
         </button>
         <a className="mt-4 text-green-400" href="https://app.superfluid.finance/" target="_blank" rel='no-opener'>View Superfluid Dashboard</a>
       </div>
+      <div className="border-green-400 border p-4 mt-3">
+        <p>Your flow will be equal to:</p>
+        <p>
+          <b>${flowRateDisplay !== " " ? flowRateDisplay : 0}</b> Maticx/month
+        </p>
+      </div>
       {
         profiles.map((profile, index) => (
           <div key={index} className="
